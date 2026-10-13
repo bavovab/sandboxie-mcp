@@ -1,5 +1,7 @@
 # Sandboxie MCP
 
+[![Build and test](https://github.com/bavovab/sandboxie-mcp/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bavovab/sandboxie-mcp/actions/workflows/ci.yml)
+
 A local MCP server for managing Sandboxie Plus from Codex and other stdio MCP clients on Windows x64.
 
 43 tools cover sandbox lifecycle, configuration, templates, resource and network rules, processes, files, native snapshots, archives, diagnostics and image control. The server uses the installed Sandboxie API and service; it does not automate SandMan's interface.
@@ -14,6 +16,8 @@ A local MCP server for managing Sandboxie Plus from Codex and other stdio MCP cl
 A Supporter Certificate is **not required for the tested core workflows**. Certificate-dependent Plus features remain subject to Sandboxie's own entitlement checks. Image creation and mounting require the corresponding entitlement and image components. See [compatibility](docs/compatibility.md).
 
 ## Install and connect
+
+Download the Windows x64 ZIP from [GitHub Releases](https://github.com/bavovab/sandboxie-mcp/releases/latest). Each release includes the executable, configuration profiles, documentation, dependency notices and a SHA-256 checksum.
 
 Extract the Windows release ZIP to `C:\Tools\sandboxie-mcp-win-x64`. Validate the selected policy before connecting:
 
