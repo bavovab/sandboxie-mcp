@@ -1,0 +1,21 @@
+{
+  "serverVersion": "1.0.0",
+  "sandboxieVersion": "1.18.5",
+  "checks": [
+    "MCP discovery, schemas, resources, diagnostics, Windows events and native journal restrictions",
+    "Sandbox creation, Unicode settings and stale revision rejection",
+    "Native launch, process identity, suspend/resume, busy guard and termination",
+    "Native snapshot branches, restored driver overlay and UTF-8 metadata",
+    "Custom environment and exclusion of inherited host secrets",
+    "Traversal rejection and unavailable premium feature reporting",
+    "Template assignment, dependency protection and typed rule writes",
+    "Archive export/import, checksum, snapshots, rename with data preservation and recovery",
+    "Live read-only isolation, sandbox visibility and Russian responses",
+    "All generated sandbox definitions and templates removed"
+  ],
+  "passed": true,
+  "testedWindowsEventLog": true,
+  "testedNativePopupJournal": false,
+  "testedEncryptedImages": false,
+  "stoppedHostServices": false
+}

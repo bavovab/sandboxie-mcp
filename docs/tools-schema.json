@@ -1,0 +1,1081 @@
+[
+  {
+    "name": "sandbox_list",
+    "description": "List sandboxes visible under the current access policy, with enabled state and process counts.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "file_recover",
+    "description": "Copy a materialized file out of a stopped sandbox into an allowed absolute external path. This writes to the host.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "sourcePath": {
+          "type": "string"
+        },
+        "destinationPath": {
+          "type": "string"
+        },
+        "overwrite": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "sandbox",
+        "sourcePath",
+        "destinationPath"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "image_mount",
+    "description": "Mount a sandbox image with an optional configured secret reference. Password values are not placed on process command lines.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "secretEnvironmentVariable": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "protect": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "sandbox"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "sandbox_info",
+    "description": "Read a sandbox's resolved storage roots, enabled state, process count and local configuration revision.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "snapshot_list",
+    "description": "List native Sandboxie snapshots and their current/default relationships.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "image_create",
+    "description": "Create an image for an empty stopped sandbox. Requires an active encryption entitlement. Passwords are referenced through user-configured environment-variable names.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "sizeMiB": {
+          "type": "integer"
+        },
+        "secretEnvironmentVariable": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "sandbox",
+        "sizeMiB"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "file_list",
+    "description": "List materialized files under a stopped sandbox's storage root. Paths are relative; results are paginated.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string",
+          "default": ""
+        },
+        "offset": {
+          "type": "integer",
+          "default": 0
+        },
+        "limit": {
+          "type": "integer",
+          "default": 100
+        }
+      },
+      "required": [
+        "sandbox"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "network_rules_replace",
+    "description": "Replace NetworkAccess rules. Actions are allow/block; protocols Any/TCP/UDP/ICMP. Numeric ports and IP addresses support comma sets and ranges. Read WFP status before relying on enforcement.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type": "string"
+              },
+              "process": {
+                "type": "string",
+                "default": "*"
+              },
+              "ports": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "default": null
+              },
+              "addresses": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "default": null
+              },
+              "protocol": {
+                "type": "string",
+                "default": "Any"
+              }
+            },
+            "required": [
+              "action"
+            ]
+          }
+        },
+        "expectedRevision": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox",
+        "values",
+        "expectedRevision"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "resource_rules_replace",
+    "description": "Replace one file, registry, IPC, window-class or COM rule list. Uses Sandboxie's native rule syntax and an expected revision.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "setting": {
+          "type": "string"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expectedRevision": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox",
+        "setting",
+        "values",
+        "expectedRevision"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "configuration_reload",
+    "description": "Reload Sandboxie configuration. Existing sandboxed processes may need restarting to use changed rules.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true
+    }
+  },
+  {
+    "name": "sandboxie_status",
+    "description": "Read Sandboxie version, component states, current access profile and detected feature flags. Does not expose certificates or secrets.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "audit_read",
+    "description": "Read recent metadata-only MCP audit entries filtered by sandbox visibility. Arguments, command lines and secrets are never logged.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "integer",
+          "default": 50
+        }
+      }
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "snapshot_restore",
+    "description": "Discard current changes and select a native snapshot. Empty snapshotId selects an empty base. Requires a stopped sandbox.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "snapshotId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox",
+        "snapshotId"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "program_rules_replace",
+    "description": "Replace forced programs/folders, breakout programs, leader/linger programs or process groups against a revision. Some rules affect isolation.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "setting": {
+          "type": "string"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expectedRevision": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox",
+        "setting",
+        "values",
+        "expectedRevision"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "template_assign",
+    "description": "Replace template assignments against a revision. Templates must exist. Manage custom template sections with configuration_read/apply.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expectedRevision": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox",
+        "values",
+        "expectedRevision"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "configuration_read",
+    "description": "Read local or effective settings and a revision. Secret settings are omitted. Global and template sections require global_config permission.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "section": {
+          "type": "string"
+        },
+        "effective": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "section"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "snapshot_create",
+    "description": "Freeze a stopped, initialized sandbox into a native snapshot layer. The new snapshot becomes current.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox",
+        "name"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "sandboxie_messages",
+    "description": "Read recorded SbieDrv/SbieSvc Windows System events after a numeric cursor. source=native requests the current-session popup journal, which requires Sandboxie's session leader. Sources have separate cursors. Requires global_config because messages may contain cross-sandbox paths.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "type": "integer",
+          "default": 0
+        },
+        "limit": {
+          "type": "integer",
+          "default": 100
+        },
+        "source": {
+          "type": "string",
+          "default": "event-log"
+        }
+      }
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "file_import",
+    "description": "Copy an allowed external file into a stopped sandbox's drive/user/share storage. Existing files require overwrite=true.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "sourcePath": {
+          "type": "string"
+        },
+        "destinationPath": {
+          "type": "string"
+        },
+        "overwrite": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "sandbox",
+        "sourcePath",
+        "destinationPath"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "sandbox_rename",
+    "description": "Rename a stopped sandbox while preserving its current file storage root. Read the returned backup and root.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "newName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox",
+        "newName"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "process_suspend",
+    "description": "Suspend or resume a process, or all current-session sandbox processes. Read process_info to verify the returned execution state.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "suspended": {
+          "type": "boolean"
+        },
+        "processId": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "sandbox",
+        "suspended"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true,
+      "idempotentHint": true
+    }
+  },
+  {
+    "name": "sandbox_delete",
+    "description": "Delete an empty, stopped sandbox definition. Content cleanup is a separate operation; deletion protection is respected.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "template_delete",
+    "description": "Delete an unused local template with a configuration backup. Built-in templates are immutable. Requires global_config and config_write.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "template": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "template"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "configuration_apply",
+    "description": "Apply validated setting changes against an expected local revision. Empty values delete a setting. Produces a backup and reports partial failures.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "section": {
+          "type": "string"
+        },
+        "changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "setting": {
+                "type": "string"
+              },
+              "values": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "setting",
+              "values"
+            ]
+          }
+        },
+        "expectedRevision": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "section",
+        "changes",
+        "expectedRevision"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "image_unmount",
+    "description": "Unmount a stopped sandbox image through the Sandboxie service.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "sandbox_size",
+    "description": "Count materialized files and bytes, including snapshots, in a stopped sandbox. Rejects reparse points.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "process_list",
+    "description": "List current-session processes belonging to the specified sandbox.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "rules_read",
+    "description": "Read local resource, network and program rules and the revision used to replace them.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "sandbox_import",
+    "description": "Import a sandboxie-mcp/1 ZIP into a new sandbox. Rejects traversal, links and extraction-limit violations. Does not overwrite an existing sandbox.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "sourcePath": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox",
+        "sourcePath"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "sandbox_clean",
+    "description": "Permanently delete all content and snapshots of a stopped sandbox while retaining its definition. Respects NeverDelete.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "file_read",
+    "description": "Read a materialized sandbox file as strict UTF-8 or base64, within maxFileBytes. Requires a stopped sandbox.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "base64": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "sandbox",
+        "path"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "sandboxie_component",
+    "description": "Start or stop Sandboxie's service or driver. Requires maintenance permission and Windows rights; stopping is refused while sandboxed processes are running.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "component": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "component",
+        "action"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "process_stop",
+    "description": "Stop a verified process or all current-session processes in a sandbox and verify termination. Omit processId to stop the sandbox's processes.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "processId": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "sandbox"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "process_start",
+    "description": "Run an absolute executable inside a sandbox with an argument array and optional working directory/environment. Reports whether membership was verified.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "executable": {
+          "type": "string"
+        },
+        "arguments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "workingDirectory": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "environment": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "default": null
+        },
+        "hidden": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "sandbox",
+        "executable",
+        "arguments"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "snapshot_delete",
+    "description": "Delete an unused leaf snapshot. Current/default snapshots and ancestors cannot be deleted; automatic layer merging is not performed.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "snapshotId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox",
+        "snapshotId"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "process_wait",
+    "description": "Wait 1..300 seconds for a verified process to exit. Timing out does not terminate it.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "processId": {
+          "type": "integer"
+        },
+        "seconds": {
+          "type": "integer",
+          "default": 30
+        }
+      },
+      "required": [
+        "sandbox",
+        "processId"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "process_info",
+    "description": "Read process identity, parent and suspended state after verifying sandbox membership. Command lines are not exposed.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "processId": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "sandbox",
+        "processId"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "image_info",
+    "description": "Query the mounted image associated with a sandbox through Sandboxie's mount manager.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sandbox"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "snapshot_update",
+    "description": "Update snapshot name/description or designate its default. makeDefault=true with an empty ID clears the default.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "snapshotId": {
+          "type": "string"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "makeDefault": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "sandbox",
+        "snapshotId"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": false
+    }
+  },
+  {
+    "name": "configuration_preview",
+    "description": "Validate proposed setting changes and show the before/after values without writing. Requires the same permissions as applying them.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "section": {
+          "type": "string"
+        },
+        "changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "setting": {
+                "type": "string"
+              },
+              "values": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "setting",
+              "values"
+            ]
+          }
+        }
+      },
+      "required": [
+        "section",
+        "changes"
+      ]
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  },
+  {
+    "name": "sandbox_create",
+    "description": "Create a named sandbox. Optionally copy another sandbox's configuration; the copy is subject to setting permissions.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "copyFrom": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "sandbox"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": false
+    }
+  },
+  {
+    "name": "sandbox_export",
+    "description": "Export local configuration and optional materialized content/snapshots to a new ZIP in sandboxie-mcp/1 format. Requires a stopped sandbox; secret settings and root paths are omitted.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sandbox": {
+          "type": "string"
+        },
+        "destinationPath": {
+          "type": "string"
+        },
+        "includeContent": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "sandbox",
+        "destinationPath"
+      ]
+    },
+    "annotations": {
+      "destructiveHint": true
+    }
+  },
+  {
+    "name": "template_list",
+    "description": "List shared configuration templates. Requires global_config and config_read.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    },
+    "annotations": {
+      "readOnlyHint": true
+    }
+  }
+]

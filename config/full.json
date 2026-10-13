@@ -1,0 +1,7 @@
+{
+  "language": "en",
+  "operationTimeoutSeconds": 120,
+  "maxFileBytes": 1048576,
+  "maxArchiveBytes": 2147483648,
+  "policy": { "profile": "full", "allowedSandboxes": ["*"] }
+}

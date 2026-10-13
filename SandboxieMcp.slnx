@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SandboxieMcp.Core/SandboxieMcp.Core.csproj" />
+    <Project Path="src/SandboxieMcp.Server/SandboxieMcp.Server.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/SandboxieMcp.Tests/SandboxieMcp.Tests.csproj" />
+  </Folder>
+</Solution>

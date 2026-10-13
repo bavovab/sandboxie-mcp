@@ -1,0 +1,9 @@
+{
+  "language": "en",
+  "policy": {
+    "profile": "operator",
+    "allowedSandboxes": ["Work_*"],
+    "allowedExecutables": ["C:\\Windows\\System32\\notepad.exe"],
+    "allowedExternalRoots": ["C:\\McpExchange"]
+  }
+}

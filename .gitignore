@@ -1,0 +1,40 @@
+# Build and test output
+**/bin/
+**/obj/
+/artifacts/
+**/TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Local editor settings
+*.user
+*.suo
+.vs/
+.idea/
+
+# Runtime state and local configuration
+/state/
+config.local.json
+config/*.local.json
+.env
+.env.*
+*.log
+*.bak
+*.tmp
+**/secrets/
+*.key
+*.pem
+*.pfx
+*.p12
+Certificate.dat
+
+# Generated binaries, archives and Python caches
+*.exe
+*.dll
+*.pdb
+*.nupkg
+*.zip
+*.7z
+**/__pycache__/
+*.pyc

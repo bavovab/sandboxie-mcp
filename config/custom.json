@@ -1,0 +1,11 @@
+{
+  "language": "en",
+  "policy": {
+    "profile": "custom",
+    "allowedSandboxes": ["Work_*"],
+    "deniedSandboxes": ["Work_Private"],
+    "allowedOperations": ["diagnostics", "sandbox_read", "config_read", "config_write", "process_read", "process_start", "process_stop", "audit_read"],
+    "allowedSettings": ["BoxAlias", "BorderColor"],
+    "allowedExecutables": ["C:\\Windows\\System32\\notepad.exe"]
+  }
+}

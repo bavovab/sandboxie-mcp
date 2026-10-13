@@ -1,0 +1,32 @@
+name: Release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+jobs:
+  release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          global-json-file: global.json
+      - name: Validate
+        shell: pwsh
+        run: ./scripts/build.ps1
+      - name: Package
+        shell: pwsh
+        run: ./scripts/publish.ps1
+      - name: Publish reviewed tag
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $taskVersion = & ./artifacts/sandboxie-mcp-win-x64/sandboxie-mcp.exe --version
+          if ($env:GITHUB_REF_NAME -ne ('v' + $taskVersion.Trim())) { throw 'Tag does not match executable version.' }
+          $taskAsset = (Get-ChildItem -LiteralPath ./artifacts -Filter '*.zip').FullName
+          gh release create $env:GITHUB_REF_NAME $taskAsset ./artifacts/SHA256SUMS.txt --verify-tag --title ('Sandboxie MCP ' + $taskVersion.Trim()) --notes-file ./docs/release-notes.md
+          if ($LASTEXITCODE) { throw 'GitHub release creation failed.' }
